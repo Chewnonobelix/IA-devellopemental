@@ -1,10 +1,8 @@
 #include "experience.h"
 
-QSet<int> Experience::m_nbExp = QSet<int>();
 
 Experience::Experience(int num): m_num(num)
 {
-    m_nbExp<<num;
 }
 
 Experience::Experience(const Experience & e): m_num(e.num()) {}

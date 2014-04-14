@@ -7,7 +7,6 @@
 class Experience
 {
 private:
-    static QSet<int> m_nbExp;
     int m_num;
 
 public:

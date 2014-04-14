@@ -3,21 +3,25 @@
 
 #include <QMultiMap>
 #include <QDebug>
+#include <QList>;
+#include <QTextStream>
 
 #include "resultat.h"
 #include "experience.h"
 
+class Interaction;
+
 class Interaction
 {
 private:
-    const Experience* m_experience;
-    const Resultat* m_resultat;
+    Experience m_experience;
+    Resultat m_resultat;
     int m_motiv;
 
-    Interaction* m_prec;
+    QList<Interaction*> m_prec;
 
 public:
-    Interaction(const Experience* = nullptr, const Resultat* = nullptr, int = 0);// Experience, resultat, motiv
+    Interaction(const Experience = Experience(), const Resultat = Resultat(), int = 0);// Experience, resultat, motiv
     Interaction(const Interaction&);
     ~Interaction();
 
@@ -25,15 +29,23 @@ public:
     void setMotivation(int);
     Experience experience() const;
     Resultat resultat() const;
-    Interaction* prec() const;
+    const QList<Interaction*>& prec() const;
+    QList<Interaction*>& prec();
     bool hasPrec() const;
     void addPrec(Interaction*);
     void affichage() const;
-
+    QString toString() const;
     bool operator == (const Interaction&) const;
+    bool operator != (const Interaction&) const;
     bool operator < (const Interaction&) const;
     Interaction& operator = (const Interaction&);
+
+    friend QTextStream& operator<< (QTextStream&, const Interaction&);
+    friend QDebug& operator<< (QDebug& , const Interaction& );
+
 };
+
+
 
 uint qHash(const Interaction&);
 #endif // INTERACTION_H

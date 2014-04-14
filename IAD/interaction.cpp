@@ -1,21 +1,17 @@
 #include "interaction.h"
 
-Interaction::Interaction(const Experience* experience, const Resultat* resultat, int motiv): m_experience(experience),
-    m_resultat(resultat), m_motiv(motiv), m_prec(nullptr)
+Interaction::Interaction(const Experience experience, const Resultat resultat, int motiv): m_experience(experience),
+    m_resultat(resultat), m_motiv(motiv)
 {
 }
 
-Interaction::Interaction(const Interaction & i): m_experience(i.m_experience),
-    m_resultat(i.m_resultat), m_motiv(i.motivation()), m_prec(i.m_prec)
+Interaction::Interaction(const Interaction & i): m_experience(i.experience()),
+    m_resultat(i.resultat()), m_motiv(i.motivation()), m_prec(i.m_prec)
 {
 }
 
 Interaction::~Interaction()
 {
-    if(m_prec != nullptr)
-    {
-        delete m_prec;
-    }
 }
 
 int Interaction::motivation() const
@@ -30,19 +26,12 @@ void Interaction::setMotivation(int val)
 
 Experience Interaction::experience() const
 {
-    return *m_experience;
+    return m_experience;
 }
 
 Resultat Interaction::resultat() const
 {
-    if(m_resultat == nullptr)
-    {
-        return Resultat();
-    }
-    else
-    {
-        return *m_resultat;
-    }
+    return m_resultat;
 }
 
 void Interaction::affichage() const
@@ -72,6 +61,10 @@ Interaction& Interaction::operator = (const Interaction& i)
     m_experience = i.m_experience;
     m_resultat = i.m_resultat;
     m_motiv = i.motivation();
+
+    m_prec.clear();
+    m_prec = i.m_prec;
+
     return *this;
 }
 
@@ -80,20 +73,44 @@ uint qHash(const Interaction& i)
     return i.motivation();
 }
 
-Interaction* Interaction::prec() const
+const QList<Interaction*>& Interaction::prec() const
+{
+    return m_prec;
+}
+
+QList<Interaction*>& Interaction::prec()
 {
     return m_prec;
 }
 
 bool Interaction::hasPrec() const
 {
-    return m_prec != nullptr;
+    return !(m_prec.isEmpty());
 }
 
-void Interaction::addPrec(Interaction * i)
+void Interaction::addPrec(Interaction *i)
 {
-    if(m_prec == nullptr)
-    {
-        m_prec = i;
-    }
+    m_prec.push_front(i);
 }
+
+bool Interaction::operator !=(const Interaction& i) const
+{
+    return !((*this) == i);
+}
+
+QString Interaction::toString() const
+{
+    return "I"+QString::number(experience().num())+QString::number(resultat().num());
+}
+QTextStream& operator<< (QTextStream& stream, const Interaction& i)
+{
+    stream<<i.toString();
+    return stream;
+}
+
+QDebug& operator<< (QDebug& d, const Interaction& i)
+{
+    d<<i.toString();
+    return d;
+}
+

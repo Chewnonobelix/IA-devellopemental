@@ -19,11 +19,14 @@ public:
     QMap<QPair<const Experience, const Resultat>, Interaction> systeme() const;
     QList<Experience> exp(const Resultat&) const;
 
+    Interaction& interaction(const Interaction&);
     Interaction interaction(const Experience&, const Resultat&) const;
+    Interaction& interaction(const Experience&, const Resultat&);
     void add(Experience, Resultat, int);
     void affichage() const;
 
     bool contain(const Experience&) const;
+    bool contain(const Interaction&) const;
 };
 
 class SystemeMotivationnel1: public SystemeMotivationnel

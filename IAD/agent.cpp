@@ -1,13 +1,13 @@
 #include "agent.h"
 
-Agent::Agent(const Environnement& e, int nbExp): m_environnement(e), m_motivationScore(0)
+Agent1::Agent1(const Environnement& e, QString fileName, int nbExp): m_environnement(e), m_motivationScore(0), m_fileName(fileName)
 {
     for(int i = 1; i <= nbExp; i++ )
     {
         m_exp[i] = Experience(i);;
     }
 
-    QFile file("trace.txt");
+    QFile file(fileName + "_trace.txt");
     if(!file.open(QIODevice::WriteOnly))
     {
         qDebug()<<"Ouverture du fichier \"trace.txt\" impossible";
@@ -16,20 +16,20 @@ Agent::Agent(const Environnement& e, int nbExp): m_environnement(e), m_motivatio
     file.close();
 }
 
-Agent::~Agent()
+Agent1::~Agent1()
 {
 }
 
-void Agent::save()
+void Agent1::save()
 {
-    QFile file("trace.txt");
+    QFile file(m_fileName + "_trace.txt");
     if(!file.open(QIODevice::Append))
     {
         qDebug()<<"Ouverture du fichier \"trace.txt\" impossible";
         return;
     }
 
-    const Interaction& it = m_trace.last();
+    const Interaction& it = *(m_trace.last());
 
     QString toWrite;
     toWrite = "Experience: " + QString::number(it.experience().num()) + ", ";
@@ -42,7 +42,7 @@ void Agent::save()
     file.close();
 }
 
-Resultat Agent::chooseResult() const
+Resultat Agent1::chooseResult() const
 {
     QMap<QPair<const Experience, const Resultat>, Interaction> temp = m_motivation.systeme();
 
@@ -66,14 +66,14 @@ Resultat Agent::chooseResult() const
     return ret;
 }
 
-QStack<Interaction> Agent::chooseExperience(const Resultat& r) const
+Experience Agent1::chooseExperience(const Resultat& r) const
 {
-    QStack<Interaction> ret;
-    Experience exp;
+    QMap<int, Experience> temp = m_environnement.experience();
+
+    Experience ret;
     if(r.num() == 0)
     {
-        exp = m_exp.first();
-        ret.push(Interaction(new Experience(exp)));
+        ret = m_exp.first();
     }
     else
     {
@@ -84,61 +84,31 @@ QStack<Interaction> Agent::chooseExperience(const Resultat& r) const
             find &= m_motivation.contain(e);
             if(!m_motivation.contain(e))
             {
-                ret.clear();
-                ret.push(Interaction(new Experience(e), new Resultat));
+                ret = e;
             }
         }
 
         if(find)
         {
-            QList<Experience> exclue;
-            exp = m_motivation.exp(r);
-
-
-            Interaction i = m_motivation.interaction(exp, r);
-
-            while(i.hasPrec())
-            {
-                ret.push(i);
-                i = *(i.prec());
-            }
-
-            ret.push(i);
+            ret = m_motivation.exp(r)[0];
         }
     }
 
     return ret;
 }
 
-void Agent::addMotivation(const Interaction& i)
+void Agent1::addMotivation(const Interaction& i)
 {
+    m_exp[i.experience().num()] = i.experience();
     m_motivation.add(i.experience(), i.resultat(), i.motivation());
     m_motivationScore += m_motivation.interaction(i.experience(), i.resultat()).motivation();
-    m_trace<<m_motivation.interaction(i.experience(), i.resultat());
+    m_trace<<&(m_motivation.interaction(i));
     save();
 }
 
-bool Agent::apprentissage(const Interaction & eff, const Interaction & expected)
+bool Agent1::apprentissage(const Interaction * eff, const Interaction * expected)
 {
-    bool ret = false;
-    if(!(eff == expected) || (expected.resultat() == Resultat()))
-    {
-        qDebug()<<"Apprend";
-        int lastIndex = m_trace.lastIndexOf(expected);
-        int nb = 0;
-        Interaction prec = expected;
-        while(prec.hasPrec())
-        {
-            nb++;
-            prec = *(prec.prec());
-        }
-        if(lastIndex - nb - 1 >= 0)
-        {
-            prec.addPrec(new Interaction(m_trace[lastIndex - nb - 1]));
-        }
-    }
-    m_last = qMakePair(eff, expected);
-    addMotivation(eff);
-
-    return ret;
+    addMotivation(*eff);
+    return true;
 }
+

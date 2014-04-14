@@ -8,14 +8,24 @@ Interaction SystemeMotivationnel::interaction(const Experience& e, const Resulta
 {
     if(r == Resultat())
     {
-        return Interaction(new Experience(e), new Resultat);
+        return Interaction(Experience(e));
     }
     return m_systeme[qMakePair(e,r)];
 }
 
+Interaction& SystemeMotivationnel::interaction(const Experience& e, const Resultat& r)
+{
+    return m_systeme[qMakePair(e,r)];
+}
+
+Interaction& SystemeMotivationnel::interaction(const Interaction & i)
+{
+    return m_systeme[qMakePair(i.experience(), i.resultat())];
+}
+
 void SystemeMotivationnel::add(Experience e, Resultat r, int m)
 {
-    m_systeme[qMakePair(e,r)] = Interaction(new Experience(e),new Resultat(r),m);
+    m_systeme[qMakePair(e,r)] = Interaction(Experience(e), Resultat(r),m);
 }
 
 void SystemeMotivationnel::affichage() const
@@ -38,6 +48,11 @@ Interaction SystemeMotivationnel::first() const
     return m_systeme.first();
 }
 
+bool SystemeMotivationnel::contain(const Interaction& i) const
+{
+    return m_systeme.contains(qMakePair(i.experience(), i.resultat()));
+}
+
 bool SystemeMotivationnel::contain(const Experience & e) const
 {
     bool ret = false;
@@ -52,17 +67,33 @@ bool SystemeMotivationnel::contain(const Experience & e) const
 
 QList<Experience> SystemeMotivationnel::exp(const Resultat & r) const
 {
-    Interaction ret = m_systeme.first();
     QList<Experience> rt;
+    QList<Interaction> temp;
     foreach (const Interaction& it, m_systeme)
     {
-        if(r == it.resultat() && ret.motivation() < it.motivation())
+        if(r == it.resultat())
         {
-            ret = it;
+            temp<<it;
         }
     }
 
-    return ret.experience();
+    for(int i = 0; i < temp.size(); i ++)
+    {
+        for(int j = i; j < temp.size(); j ++)
+        {
+            if(temp[i] < temp[j])
+            {
+                temp.swap(i,j);
+            }
+        }
+    }
+
+    foreach (const Interaction& it, temp)
+    {
+        rt<<it.experience();
+    }
+
+    return rt;
 }
 
 SystemeMotivationnel1::SystemeMotivationnel1()

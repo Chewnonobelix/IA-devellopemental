@@ -7,7 +7,6 @@
 class Resultat
 {
 private:
-    static QSet<int> m_nbRes;
     int m_num;
 
 public:
@@ -20,6 +19,7 @@ public:
 
     bool operator <(const Resultat&) const;
     bool operator == (const Resultat&) const;
+    bool operator != (const Resultat&) const;
     Resultat& operator =(const Resultat&);
 };
 

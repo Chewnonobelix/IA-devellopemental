@@ -143,8 +143,11 @@ void Environnement4::appliqueTransfo(Experience, Resultat)
 
 void Environnement3::appliqueTransfo(Experience e, Resultat r)
 {
+    static int i = 0;
+//    qDebug()<<e.num()<<r.num();
     if(e == Experience(1) && r == Resultat(2))
     {
+//        qDebug()<<"1 => 2"<<i;
         removePair(1,2);
         removePair(2,1);
 
@@ -154,11 +157,14 @@ void Environnement3::appliqueTransfo(Experience e, Resultat r)
 
     if(e == Experience(2) && r == Resultat(2))
     {
+//        qDebug()<<"2=>1"<<i;
         removePair(2,2);
         removePair(1,1);
 
         addPair(1,2);
         addPair(2,1);
     }
+
+    i++;
 }
 

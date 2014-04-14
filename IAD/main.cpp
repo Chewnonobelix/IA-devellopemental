@@ -27,23 +27,27 @@ void testAgent2(Environnement* env, SystemeMotivationnel* systemeBase, QString f
 {
     Agent2 a(*env, file);
     QStack<Interaction*> ep;
-
     ep.clear();
     for(int i = 0; i < 100; i ++)
     {
+
         if(ep.isEmpty())
         {
             Resultat r = a.chooseResult();
             ep = a.chooseExperience(r);
         }
-        bool apprend = false;
-        Interaction* in = ep.pop();
-        Resultat rt = env->result((*in).experience());
-        apprend = a.apprentissage(&(systemeBase->interaction((*in).experience(), rt)), in);
 
-        if(apprend)
+        bool apprend = false;
+
+        while(!ep.isEmpty()&& !apprend)
         {
-            ep.clear();
+            Interaction* in = ep.pop();
+            Resultat rt = env->result((*in).experience());
+            apprend = a.apprentissage(&(systemeBase->interaction((*in).experience(), rt)), in);
+            if(apprend)
+            {
+                ep.clear();
+            }
         }
     }
 
@@ -56,7 +60,6 @@ void testAgent3(Environnement* env, SystemeMotivationnel* systemeBase, QString f
 {
     Agent3 a(*env, file);
     QStack<Interaction*> ep;
-
     ep.clear();
     for(int i = 0; i < 100; i ++)
     {
@@ -119,11 +122,18 @@ int main(int, char**)
     try
     {
             testAgent3(new Environnement3, new SystemeMotivationnel3, "test333");
-            testAgent3(new Environnement3, new SystemeMotivationnel4, "test334");
     }
     catch(QString execp)
     {
-        qDebug()<<"fail"<<execp;
+        qDebug()<<"fail 333"<<execp;
+    }
+    try
+    {
+        testAgent3(new Environnement3, new SystemeMotivationnel4, "test334");
+    }
+    catch(QString execp)
+    {
+        qDebug()<<"fail 334"<<execp;
     }
 
     testAgent3(new Environnement4, new SystemeMotivationnel1, "test341");

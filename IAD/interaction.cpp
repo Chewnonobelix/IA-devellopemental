@@ -40,12 +40,12 @@ Resultat Interaction::resultat() const
 
 void Interaction::affichage() const
 {
-//    qDebug()<<"Experience: "<<m_experience->num()<<"Resultat: "<<m_resultat->num()<<"Motivation: "<<m_motiv;
+    qDebug()<<"Experience: "<<m_experience.num()<<"Resultat: "<<m_resultat.num()<<"Motivation: "<<m_motiv;
 }
 
 bool Interaction::operator <(const Interaction& i) const
 {
-    return motivation() < i .motivation();
+    return motivation() < i.motivation();
 }
 
 bool Interaction::operator ==(const Interaction& i) const

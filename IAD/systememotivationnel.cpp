@@ -100,6 +100,8 @@ QList<Experience> SystemeMotivationnel::exp(const Resultat & r) const
     {
         for(int j = i; j < temp.size(); j ++)
         {
+            //qDebug()<<temp[i].toString()<<temp[i].motivation()<<temp[j].toString()<<temp[j].motivation();
+
             if(temp[i] < temp[j])
             {
                 temp.swap(i,j);

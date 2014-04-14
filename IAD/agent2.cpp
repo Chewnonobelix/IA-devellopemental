@@ -79,7 +79,6 @@ QStack<Interaction *> Agent2::chooseExperience(const Resultat& r)
         if(find)
         {
             exps = m_motivation.exp(r);
-
             Interaction& i = m_motivation.interaction(exps[0], r);
 
             for(int j = i.prec().size() - 1; j >= 0; j --)
@@ -117,9 +116,8 @@ bool Agent2::apprentissage(const Interaction *eff, const Interaction *expected)
         if(lastIndex != -1 && lastIndex - base.prec().size() - 1 >= 0 && !base.prec().contains(m_trace[lastIndex - base.prec().size() - 1]) && m_trace[lastIndex - base.prec().size() - 1] != expected)
         {
             base.addPrec(m_trace[lastIndex - base.prec().size() - 1]);
+            ret = true;
         }
-
-        ret = true;
     }
 
     addMotivation(const_cast<Interaction*>(eff));

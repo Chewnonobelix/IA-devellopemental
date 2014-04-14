@@ -18,6 +18,21 @@ Interaction& SystemeMotivationnel::interaction(const Experience& e, const Result
     return m_systeme[qMakePair(e,r)];
 }
 
+QList<Interaction> SystemeMotivationnel::interaction(const Experience& e) const
+{
+    QList<Interaction> ret;
+
+    foreach(const Interaction& it, m_systeme)
+    {
+        if(it.experience() == e)
+        {
+            ret<<it;
+        }
+    }
+
+    return ret;
+}
+
 Interaction& SystemeMotivationnel::interaction(const Interaction & i)
 {
     return m_systeme[qMakePair(i.experience(), i.resultat())];
@@ -37,8 +52,12 @@ void SystemeMotivationnel::affichage() const
     }
 }
 
-
 QMap<QPair<const Experience, const Resultat>, Interaction> SystemeMotivationnel::systeme() const
+{
+    return m_systeme;
+}
+
+QMap<QPair<const Experience, const Resultat>, Interaction>& SystemeMotivationnel::systeme()
 {
     return m_systeme;
 }

@@ -114,9 +114,31 @@ Environnement3::Environnement3():Environnement(2,2)
     addPair(2,1);
 }
 
+Environnement4::Environnement4():Environnement(2,2), m_turn(0)
+{
+    addPair(2,2);
+    addPair(1,1);
+}
+
 int Environnement::size() const
 {
     return m_liste.size();
+}
+
+void Environnement4::appliqueTransfo(Experience, Resultat)
+{
+    if(m_turn > 10)
+    {
+        removePair(2,2);
+        removePair(1,1);
+        removePair(2,1);
+        removePair(1,2);
+
+        addPair(2,1);
+        addPair(1,2);
+    }
+
+    m_turn ++;
 }
 
 void Environnement3::appliqueTransfo(Experience e, Resultat r)

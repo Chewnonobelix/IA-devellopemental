@@ -1,12 +1,12 @@
 #include "interaction.h"
 
 Interaction::Interaction(const Experience experience, const Resultat resultat, int motiv): m_experience(experience),
-    m_resultat(resultat), m_motiv(motiv)
+    m_resultat(resultat), m_motiv(motiv), m_poid(0)
 {
 }
 
 Interaction::Interaction(const Interaction & i): m_experience(i.experience()),
-    m_resultat(i.resultat()), m_motiv(i.motivation()), m_prec(i.m_prec)
+    m_resultat(i.resultat()), m_motiv(i.motivation()), m_poid(i.poid()), m_prec(i.m_prec)
 {
 }
 
@@ -14,6 +14,10 @@ Interaction::~Interaction()
 {
 }
 
+double Interaction::procl() const
+{
+    return motivation() * poid();
+}
 int Interaction::motivation() const
 {
     return m_motiv;
@@ -114,3 +118,12 @@ QDebug& operator<< (QDebug& d, const Interaction& i)
     return d;
 }
 
+int Interaction::poid() const
+{
+    return m_poid;
+}
+
+void Interaction::setPoid(int p)
+{
+    m_poid = p;
+}

@@ -55,4 +55,16 @@ public:
     Environnement3();
 };
 
+class Environnement4: public Environnement
+{
+private:
+    int m_turn;
+
+protected:
+    void appliqueTransfo(Experience, Resultat);
+
+public:
+    Environnement4();
+};
+
 #endif // ENVIRONNEMENT_H

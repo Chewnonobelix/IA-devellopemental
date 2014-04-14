@@ -17,6 +17,7 @@ private:
     Experience m_experience;
     Resultat m_resultat;
     int m_motiv;
+    int m_poid;
 
     QList<Interaction*> m_prec;
 
@@ -25,6 +26,9 @@ public:
     Interaction(const Interaction&);
     ~Interaction();
 
+    int poid() const;
+    void setPoid(int);
+    double procl() const;
     int motivation() const;
     void setMotivation(int);
     Experience experience() const;

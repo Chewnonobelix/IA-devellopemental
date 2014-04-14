@@ -17,8 +17,9 @@ public:
     SystemeMotivationnel();
     Interaction first() const;
     QMap<QPair<const Experience, const Resultat>, Interaction> systeme() const;
+    QMap<QPair<const Experience, const Resultat>, Interaction>& systeme();
     QList<Experience> exp(const Resultat&) const;
-
+    QList<Interaction> interaction(const Experience &) const;
     Interaction& interaction(const Interaction&);
     Interaction interaction(const Experience&, const Resultat&) const;
     Interaction& interaction(const Experience&, const Resultat&);

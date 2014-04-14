@@ -21,7 +21,7 @@ public:
 
     Resultat chooseResult() const;
     QStack<Interaction*> chooseExperience(const Resultat&);
-    void addMotivation(Interaction*);
+    virtual void addMotivation(Interaction*);
     bool apprentissage(const Interaction*, const Interaction*);
 };
 

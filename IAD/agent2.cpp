@@ -95,7 +95,6 @@ QStack<Interaction *> Agent2::chooseExperience(const Resultat& r)
 
 void Agent2::addMotivation(Interaction *i)
 {
-
     if(!m_motivation.contain(*i))
     {
         m_motivation.add(i->experience(), i->resultat(), i->motivation());
@@ -119,6 +118,8 @@ bool Agent2::apprentissage(const Interaction *eff, const Interaction *expected)
         {
             base.addPrec(m_trace[lastIndex - base.prec().size() - 1]);
         }
+
+        ret = true;
     }
 
     addMotivation(const_cast<Interaction*>(eff));
